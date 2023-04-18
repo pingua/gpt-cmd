@@ -47,3 +47,7 @@ I have learned about some Python best practices and how to write a README file.
 > Really? Can you tell me more about that?
 Sure, a README file is a guide that gives users a detailed description of a project and how to use it. It can be written in plain text, reStructuredText, or Markdown formats.
 ```
+
+## Disclaimer
+
+This script was created using Bing AI, a chat mode of Microsoft Bing search that can understand and communicate fluently in different languages and generate content such as poems, stories, code, essays, songs, celebrity parodies and more. Bing AI is not an official product of Microsoft and is not endorsed by Microsoft or OpenAI. The script is provided "as is" without any warranty or liability. Use it at your own risk and discretion.
