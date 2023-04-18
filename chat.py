@@ -28,12 +28,8 @@ def authenticate_openai():
             sys.exit()
 
 
-def generate_chat_completion(prompt, temperature, max_tokens, model, system_prompt):
+def generate_chat_completion(temperature, max_tokens, model, messages=[]):
     # Proceed with chat completion using the specified model and prompt
-    messages = [{"role": "user", "content": prompt}]
-    if system_prompt:
-        messages.insert(0, {"role": "system", "content": system_prompt})
-    print(messages)
     completion = openai.ChatCompletion.create(
         model=model,
         messages=messages,
@@ -41,21 +37,28 @@ def generate_chat_completion(prompt, temperature, max_tokens, model, system_prom
         temperature=temperature,
     )
     # Extract the message from the completion response
-    message = completion.choices [0].message.content
-    return message
+    response = completion.choices[0].message.content
+    return response
 
 
 @click.command()
-@click.option("--prompt", "-p", prompt="Enter your prompt", help="The prompt to start the chat")
 @click.option("--model", "-m", default="gpt-3.5-turbo", help="The GPT-3.5 model to use")
 @click.option("--temperature", "-t", default=0.5, help="The temperature to use when generating responses")
 @click.option("--max-tokens", "-max", default=1000, help="The maximum number of tokens to generate in the response")
 @click.option("--system-prompt", "-sp", prompt="Enter the system prompt (optional)", help="The prompt for system messages")
-def main(prompt, model, temperature, max_tokens, system_prompt):
+def main(model, temperature, max_tokens, system_prompt):
     authenticate_openai()
-    message = generate_chat_completion(prompt, temperature, max_tokens, model, system_prompt)
-    print(message)
-
+    messages = [] # initialize an empty list of messages
+    if system_prompt: # add the system prompt if provided
+        messages.append({"role": "system", "content": system_prompt})
+    while True: # start a loop that keeps asking for user input
+        prompt = input("> ") # get the user prompt
+        if prompt == "quit":
+            break
+        messages.append({"role": "user", "content": prompt}) # add it to the messages list
+        response = generate_chat_completion(temperature, max_tokens, model, messages) # generate a chat completion using the messages list
+        print(response) # print the response
+        messages.append({"role": "assistant", "content": response}) # add it to the messages list
 
 if __name__ == "__main__":
     main()
